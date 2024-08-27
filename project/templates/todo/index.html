@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container-fluid">
+
+    <div class="container-md">
+        <nav class="navbar">
+            <h1>{% block title %}Lista de Tareas{% endblock title %}</h1>
+            <a href="{{ url_for('todo.create') }}" class="btn btn-success">Nuevo</a>
+        </nav>
+
+        <table class="table">
+            <thead class="text-center">
+                <tr>
+                    <th class="col">Tareas</th>
+                    <th class="col">Estado</th>
+                    <th class="col">Fecha</th>
+                    <th class="col" colspan="2">Opciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                {% for todo in todos | reverse %}
+                <tr>
+                    <td>
+                        <h5>{{todo.title}}</h5>
+                        <p>{{todo.desc}}</p>
+                    </td>
+                    <td class="text-center">
+                        {% if todo.state == 0 %}
+                        <p class="text-danger">Incompleta</p>
+                        {% else %}
+                        <p class="text-success">Completada</p>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {{todo.created_at.strftime('%Y-%m-%d %H:%M')}}
+                    </td>
+                    <td class="text-end">
+                        <a href="{{ url_for('todo.update', id = todo.id) }}"
+                            class="btn btn-outline-primary btn-sm">Editar</a>
+                    </td>
+                    <td class="text-start">
+                        <a href="#" class="btn btn-outline-danger btn-sm" id="delete-todo" name="delete-todo"
+                            data-url="{{ url_for('todo.delete', id = todo.id) }}">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+{% endblock content %}

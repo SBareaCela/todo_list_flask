@@ -1,0 +1,53 @@
+############ EJEMPLO DE FORMULARIO CON WTFORM ############
+<form action="" method="post">
+    {{ form.hidden_tag()}}
+    <div class="form-group">
+        {{ form.username.label }}{{ form.username }}
+    </div>
+    <div class="form-group">
+        {{ form.password.label }}{{ form.password }}
+    </div>
+    <div class="text-center">
+        {{ form.submit }}
+    </div>
+</form>
+
+############ ROLLBACK DE LA SESIÓN ############
+
+El rollback sirve por si ha habido un error en una transacción de datos 
+con la base de datos. Se asegura de revertirlo todo y evitar fallos en la bbdd.
+
+db.session.rollback()
+
+########### MIGRACIONES BBDD ############
+
+Tener instalado en este caso flask-migrate.
+Configurar variable de entorno FLASK_APP con la ejecución del proyecto, en este caso seria (hecho desde powershell):
+* $env:FLASK_APP = "project:create_app"
+
+Si todo ha funcionado, lo siguiente es inicializar nuestras migraciones con el siguiente comando desde la carpeta raiz:
+* flask db init
+
+Para crear y aplicar nuestras migracias hay que introducir los siguientes comandos:
+* flask db migrate -m "Mensaje de la migración"
+* flask db upgrade
+
+
+############ FUNCIONES VARIAS DE JINJA2 en html ############
+<h1>Bienvenido a mi sitio web con flask</h1>
+{% if g.user %}
+<p>Hola, {{ g.user.username | upper }}.</p>
+{% else %}
+<p>Hola, anonimo.</p>
+{% endif %}
+
+<h2>Lista de amigos:</h2>
+<ul>
+    {% for friend in friends %}
+    <li>{{ friend }}</li>
+    {% endfor %}
+</ul>
+
+<p>La fecha de hoy es {{ date | today }}</p>
+
+<p>La frase repetida es: {{ repeat(name | upper + " ", 3) }}</p>

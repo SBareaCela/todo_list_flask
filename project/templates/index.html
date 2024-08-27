@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Página de inicio {% endblock %}
+
+{% block content %}
+<h1>Bienvenido a mi sitio web con flask</h1>
+{% if g.user %}
+<p>Hola, {{ g.user.username | upper }}.</p>
+{% else %}
+<p>Hola, anonimo.</p>
+{% endif %}
+
+<p> Esta página es un proyecto de prueba, sirve para la gestión de tareas, además de dispones de registro de usuario y login.</p>
+
+{% endblock %}

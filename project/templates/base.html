@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Incluir jQuery primero -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- CSS -->
+    <!-- Incluir CSS de BootStrap 5 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <!-- Incluir CSS de BootStrap 5 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Incluir CSS de Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <!-- Incluir CSS de SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+</head>
+
+<body>
+
+    <!-- navbar nav -->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a href="/">
+                <img class="bi me-2" src="{{ url_for('static', filename='img/flask-icon.svg') }}" width="40" height="32"
+                    alt="Flask Icon" style="filter: brightness(0) invert(1);">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" href="#navbarNav" role="button"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+                <!-- Lista de enlaces principales alineada a la izquierda -->
+                <ul class="nav col-6 col-lg-auto my-2 justify-content-start my-md-0 text-small">
+                    <li>
+                        <a href="{{ url_for('index') }}" class="nav-link text-white">
+                            <!-- Aqui se puede insertar posible imagen de icono para cada pestaña -->
+                            Inicio
+                        </a>
+                    </li>
+                    {# <li>
+                        <a href="{{ url_for('hello') }}" class="nav-link text-white">
+                            Saludo
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('plus') }}" class="nav-link text-white">
+                            Sumar
+                        </a>
+                    </li> #}
+                    {% if g.user %}
+                    <li>
+                        <a href="{{ url_for('todo.index') }}" class="nav-link text-white">
+                            Mis tareas
+                        </a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+
+                <!-- Lista para los botones del Login y Register alineada a la derecha -->
+                <ul class="nav col-6 col-lg-auto my-2 justify-content-end my-md-0 text-small">
+                    {% if g.user %}
+                    <li>
+                        <span class="nav-link active">{{ g.user.username }}</span>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('auth.logout') }}" class="nav-link text-white">
+                            Cerrar Sesión
+                        </a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="{{ url_for('auth.register') }}" class="nav-link text-white">
+                            Sign Up
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('auth.login') }}" class="nav-link text-white">
+                            Login
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- fin navbar nav -->
+
+    {% block content %}
+    <!-- Bloque del contenido de la pagina -->
+    {% endblock %}
+
+    <!-- Error de flash -->
+    {# <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div> #}
+
+    <!-- JS -->
+    <!-- Incluir JS de BootStrap5 -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Incluir JS de Toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- Incluir JS de SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Incluir tu script personalizado -->
+    <script src="{{ url_for('static', filename='js/todo.js') }}"></script>
+
+    <!-- Mensajes de notificación con TOASTR -->
+    <script>
+        //Configuración de las notificaciones toastr
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        // Verificar si hay mensajes flash y mostrarlos con Toastr
+        {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            // Usar console.log para depuración
+            console.log("Categoría: {{ category }}, Mensaje: {{ message }}");
+
+            // Usar el filtro | safe para desescapar los mensajes correctamente
+            toastr.{{ category | safe }} ('{{ message | safe }}');
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </script>
+</body>
+
+</html>
