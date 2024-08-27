@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
 
-    <!-- Incluir jQuery primero -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <!-- CSS -->
     <!-- Incluir CSS de BootStrap 5 -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
@@ -24,37 +21,26 @@
 <body>
 
     <!-- navbar nav -->
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-            <a href="/">
-                <img class="bi me-2" src="{{ url_for('static', filename='img/flask-icon.svg') }}" width="40" height="32"
-                    alt="Flask Icon" style="filter: brightness(0) invert(1);">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" href="#navbarNav" role="button"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="/">Flask<img class="bi me-2" src="{{ url_for('static', filename='img/flask-icon.svg') }}" width="40" height="32"
+                    alt="Flask Icon" style="filter: brightness(0) invert(1);"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapsableContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+
+            <div class="collapse navbar-collapse" id="navbarCollapsableContent">
                 <!-- Lista de enlaces principales alineada a la izquierda -->
-                <ul class="nav col-6 col-lg-auto my-2 justify-content-start my-md-0 text-small">
-                    <li>
+                <ul class="nav navbar-nav col-6 col-lg-auto my-2 justify-content-start my-md-0 text-small">
+                    <li class="nav-item">
                         <a href="{{ url_for('index') }}" class="nav-link text-white">
                             <!-- Aqui se puede insertar posible imagen de icono para cada pestaña -->
                             Inicio
                         </a>
                     </li>
-                    {# <li>
-                        <a href="{{ url_for('hello') }}" class="nav-link text-white">
-                            Saludo
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('plus') }}" class="nav-link text-white">
-                            Sumar
-                        </a>
-                    </li> #}
                     {% if g.user %}
-                    <li>
+                    <li class="nav-item">
                         <a href="{{ url_for('todo.index') }}" class="nav-link text-white">
                             Mis tareas
                         </a>
@@ -64,25 +50,28 @@
                 </ul>
 
                 <!-- Lista para los botones del Login y Register alineada a la derecha -->
-                <ul class="nav col-6 col-lg-auto my-2 justify-content-end my-md-0 text-small">
+                <ul class="nav navbar-nav col my-2 justify-content-end my-md-0 text-small">
                     {% if g.user %}
-                    <li>
-                        <span class="nav-link active">{{ g.user.username }}</span>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('auth.logout') }}" class="nav-link text-white">
-                            Cerrar Sesión
-                        </a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="dropdownMenu" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">{{ g.user.username }}</a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenu">
+                            <li class="nav-item">
+                                <a href="{{ url_for('auth.logout') }}" class="dropdown-item">
+                                    Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     {% else %}
-                    <li>
+                    <li class="nav-item">
                         <a href="{{ url_for('auth.register') }}" class="nav-link text-white">
-                            Sign Up
+                            Registrarse
                         </a>
                     </li>
-                    <li>
+                    <li class="nav-item">
                         <a href="{{ url_for('auth.login') }}" class="nav-link text-white">
-                            Login
+                            Iniciar sesión
                         </a>
                     </li>
                     {% endif %}
@@ -114,13 +103,16 @@
     </div> #}
 
     <!-- JS -->
-    <!-- Incluir JS de BootStrap5 -->
+    <!-- Incluir jQuery primero -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- BootStrap5 y Popperjs -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-    <!-- Incluir JS de Toastr -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <!-- Toastr -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <!-- Incluir JS de SweetAlert2 -->
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Incluir tu script personalizado -->
+    <!-- ToDo.js -->
     <script src="{{ url_for('static', filename='js/todo.js') }}"></script>
 
     <!-- Mensajes de notificación con TOASTR -->
@@ -147,15 +139,27 @@
         // Verificar si hay mensajes flash y mostrarlos con Toastr
         {% with messages = get_flashed_messages(with_categories = true) %}
         {% if messages %}
-            {% for category, message in messages %}
-            // Usar console.log para depuración
-            console.log("Categoría: {{ category }}, Mensaje: {{ message }}");
+        {% for category, message in messages %}
+        // Usar console.log para depuración
+        console.log("Categoría: {{ category }}, Mensaje: {{ message }}");
 
-            // Usar el filtro | safe para desescapar los mensajes correctamente
-            toastr.{{ category | safe }} ('{{ message | safe }}');
-            {% endfor %}
+        // Usar el filtro | safe para desescapar los mensajes correctamente
+        toastr.{ { category | safe } } ('{{ message | safe }}');
+        {% endfor %}
         {% endif %}
         {% endwith %}
+    </script>
+
+    <script type="text/javascript">
+        $('.js-scroll-trigger').click(function () {
+            $('.navbar-collapse').collapse('hide');
+        });
+    </script>
+
+    <script type="text/javascript">
+        $('a.dropdown').on('click', function () {
+            $(this).parent().toggleClass('open');
+        });
     </script>
 </body>
 
