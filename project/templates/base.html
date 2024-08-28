@@ -7,8 +7,10 @@
     <title>{% block title %}{% endblock %}</title>
 
     <!-- CSS -->
-    <!-- Incluir CSS de BootStrap 5 -->
+    <!-- Incluir CSS de Mis Tareas -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+    <!-- Incluir CSS de Navbar -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
     <!-- Incluir CSS de BootStrap 5 -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <!-- Incluir CSS de Toastr -->
@@ -23,8 +25,9 @@
     <!-- navbar nav -->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">Flask<img class="bi me-2" src="{{ url_for('static', filename='img/flask-icon.svg') }}" width="40" height="32"
-                    alt="Flask Icon" style="filter: brightness(0) invert(1);"></a>
+            <a class="navbar-brand" href="/">Flask<img class="bi me-2"
+                    src="{{ url_for('static', filename='img/flask-icon.svg') }}" width="40" height="32" alt="Flask Icon"
+                    style="filter: brightness(0) invert(1);"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapsableContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -34,14 +37,14 @@
                 <!-- Lista de enlaces principales alineada a la izquierda -->
                 <ul class="nav navbar-nav col-6 col-lg-auto my-2 justify-content-start my-md-0 text-small">
                     <li class="nav-item">
-                        <a href="{{ url_for('index') }}" class="nav-link text-white">
+                        <a href="{{ url_for('index') }}" class="nav-link text-white" name="navbarEnlace">
                             <!-- Aqui se puede insertar posible imagen de icono para cada pestaña -->
                             Inicio
                         </a>
                     </li>
                     {% if g.user %}
                     <li class="nav-item">
-                        <a href="{{ url_for('todo.index') }}" class="nav-link text-white">
+                        <a href="{{ url_for('todo.index') }}" class="nav-link text-white" name="navbarEnlace">
                             Mis tareas
                         </a>
                     </li>
@@ -52,12 +55,19 @@
                 <!-- Lista para los botones del Login y Register alineada a la derecha -->
                 <ul class="nav navbar-nav col my-2 justify-content-end my-md-0 text-small">
                     {% if g.user %}
+                    <li class="nav-item d-flex align-items-center me-2">
+                        <p class="text-white mb-0">{{ g.user.username }}</p>
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="dropdownMenu" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">{{ g.user.username }}</a>
-                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenu">
+
+                        <a class="nav-link text-white" href="#" id="dropdownMenu" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ url_for('static', filename='img/kebabhorizontal.png') }}" width="20px" style="filter: invert(1);" id="navbarKebabIcon" name="navbarEnlace">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark bg-dark dropdown-menu-end"
+                            aria-labelledby="dropdownMenu">
                             <li class="nav-item">
-                                <a href="{{ url_for('auth.logout') }}" class="dropdown-item">
+                                <a href="{{ url_for('auth.logout') }}" class="dropdown-item" name="navbarEnlace">
                                     Cerrar Sesión
                                 </a>
                             </li>
@@ -65,12 +75,12 @@
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a href="{{ url_for('auth.register') }}" class="nav-link text-white">
+                        <a href="{{ url_for('auth.register') }}" class="nav-link text-white" name="navbarEnlace">
                             Registrarse
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url_for('auth.login') }}" class="nav-link text-white">
+                        <a href="{{ url_for('auth.login') }}" class="nav-link text-white" name="navbarEnlace">
                             Iniciar sesión
                         </a>
                     </li>

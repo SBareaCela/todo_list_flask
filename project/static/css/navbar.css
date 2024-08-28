@@ -1,0 +1,19 @@
+a[name=navbarEnlace] {
+    text-decoration: none;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+a[name=navbarEnlace]:hover {
+    opacity: 0.5;
+}
+
+#navbarKebabIcon {
+    text-decoration: none;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+#navbarKebabIcon:hover {
+    opacity: 0.5;
+}

@@ -9,8 +9,9 @@ bp = Blueprint('todo', __name__, url_prefix='/todo')
 @bp.route('/list')
 @login_required
 def index():
-    todos = Todo.query.filter_by(created_by = g.user.id)
-    return render_template('todo/index.html', todos = todos)
+    todos = Todo.query.filter_by(created_by = g.user.id).all()
+    has_todos =  len(todos) > 0
+    return render_template('todo/index.html', todos = todos, has_todos = has_todos)
 
 #! Metodo para crear la tarea de un usuario
 @bp.route('/create', methods=('GET', 'POST'))

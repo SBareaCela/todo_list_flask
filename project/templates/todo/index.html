@@ -3,12 +3,21 @@
 <section class="container-fluid">
 
     <div class="container-md">
-        <nav class="navbar">
+        {# <nav class="navbar">
             <h1>{% block title %}Lista de Tareas{% endblock title %}</h1>
             <a href="{{ url_for('todo.create') }}" class="btn btn-success">Nuevo</a>
-        </nav>
+        </nav> #}
 
-        <table class="table">
+        {% if not has_todos %}
+        <div class="container text-center">
+            <h1 class="display-3">No hay tareas registradas</h1>
+            <a href="{{ url_for('todo.create') }}" class="btn btn-success btn-lg">Crear Tarea</a>
+        </div>
+        {% else %}
+        <div class="container text-center mt-3">
+            <a href="{{ url_for('todo.create') }}" class="btn btn-success btn-lg">Crear Tarea</a>
+        </div>
+        <table class="table mt-3">
             <thead class="text-center">
                 <tr>
                     <th class="col">Tareas</th>
@@ -46,6 +55,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% endif %}
     </div>
 
 </section>
