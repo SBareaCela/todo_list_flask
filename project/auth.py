@@ -20,16 +20,9 @@ class RegisterForm(FlaskForm):
     password = PasswordField("Contraseña: ", validators= [DataRequired(), Length(min=6, max=40)])
     submit = SubmitField("Registrar")
 
-#! Ruta del formulario
+#! Metodo para realizar el registro / mostrar formulario de registro
 @bp.route('/register', methods = ['GET', 'POST'])
 def register():
-    # form = RegisterForm()
-    # if form.validate_on_submit():
-    #     username = form.username.data
-    #     password = form.password.data
-    #     success = True
-    #     return render_template('auth/register.html', form = form, success = success)
-
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -53,6 +46,7 @@ def register():
             flash(message, 'error')
     return render_template('auth/register.html')
 
+#! Metodo para realizar el login / mostrar formulario login
 @bp.route('/login', methods = ['GET', 'POST'])
 def login():
 
@@ -65,12 +59,8 @@ def login():
 
         message = None
 
-        if user == None:
-            message = 'El nombre de usuario introducido no está registrado'
-            flash(message, 'error')
-        elif not check_password_hash(user.password, password):
-            message = '''La contraseña o el Usuario no concuerdan, 
-            verifique los datos introducidos.'''
+        if user == None or not check_password_hash(user.password, password):
+            message = "La contraseña o el usuario no concuerdan, verifique los datos introducidos."
             flash(message, 'error')
 
         if message == None:
@@ -80,6 +70,7 @@ def login():
 
     return render_template('auth/login.html')
 
+#! Metodo para mantener la sesión del usuario logeado
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
@@ -89,12 +80,13 @@ def load_logged_in_user():
     else:
         g.user = User.query.get_or_404(user_id)
 
+#! Metodo para cerrar sesión
 @bp.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
 
-#? Función para comprobar si el usuario ha iniciado sesión antes de entrar en una url
+#! Decorador para comprobar si el usuario ha iniciado sesión antes de entrar en una url
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):

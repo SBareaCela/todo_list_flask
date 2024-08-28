@@ -21,7 +21,7 @@
 <body>
 
     <!-- navbar nav -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Flask<img class="bi me-2" src="{{ url_for('static', filename='img/flask-icon.svg') }}" width="40" height="32"
                     alt="Flask Icon" style="filter: brightness(0) invert(1);"></a>
@@ -123,7 +123,7 @@
             "debug": false,
             "newestOnTop": true,
             "progressBar": false,
-            "positionClass": "toast-top-right",
+            "positionClass": "toast-bottom-right",
             "preventDuplicates": false,
             "onclick": null,
             "showDuration": "300",
@@ -144,7 +144,7 @@
         console.log("Categoría: {{ category }}, Mensaje: {{ message }}");
 
         // Usar el filtro | safe para desescapar los mensajes correctamente
-        toastr.{ { category | safe } } ('{{ message | safe }}');
+        toastr.{{ category | safe }}('{{ message | safe }}');
         {% endfor %}
         {% endif %}
         {% endwith %}
